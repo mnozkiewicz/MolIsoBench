@@ -1,0 +1,19 @@
+[project]
+name = "molisobench"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.8",
+    "networkx>=3.6.1",
+    "numpy>=2.4.2",
+    "pandas>=3.0.2",
+    "pyarrow>=23.0.1",
+    "rdkit>=2025.9.5",
+    "torch>=2.10.0",
+    "torch-geometric>=2.7.0",
+    "torchaudio>=2.10.0",
+    "torchvision>=0.25.0",
+]
