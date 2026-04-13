@@ -12,9 +12,9 @@ wheels/
 
 # datasets
 data/*
+datasets/*
 
 
 # Vscode
-
 .DS_Store
 .vscode

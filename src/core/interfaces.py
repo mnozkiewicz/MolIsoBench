@@ -1,6 +1,7 @@
 import networkx as nx
 from abc import ABC, abstractmethod
 from typing import Any, Iterator, Dict, Tuple
+import numpy as np
 
 
 class GraphProvider(ABC):
@@ -14,7 +15,6 @@ class GraphProvider(ABC):
 
 
 class Converter(ABC):
-    
     @abstractmethod
     def convert(self, graph: nx.Graph) -> Any:
         """
@@ -22,16 +22,15 @@ class Converter(ABC):
         """
         pass
 
-# # ==========================================
-# # 3. The Embedding Model
-# # ==========================================
-# class EmbeddingModel(ABC):
-#     @property
-#     @abstractmethod
-#     def embedding_dim(self) -> int:
-#         pass
 
-#     @abstractmethod
-#     def embed(self, formatted_data: Any) -> np.ndarray:
-#         """Takes the output of the Converter and returns a vector."""
-#         pass
+class EmbeddingModel(ABC):
+
+    @property
+    @abstractmethod
+    def embedding_dim(self) -> int:
+        pass
+
+    @abstractmethod
+    def embed(self, formatted_data: Any) -> np.ndarray:
+        """Takes the output of the Converter and returns a vector."""
+        pass
