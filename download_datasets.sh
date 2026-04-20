@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+DOWNLOAD_ALL=false
+if [[ "${1:-}" == "--download-all" ]]; then
+  DOWNLOAD_ALL=true
+fi
+
 # Directory to store datasets
 OUT_DIR="datasets/g6/"
 BASE_URL="https://users.cecs.anu.edu.au/~bdm/data"
@@ -79,6 +84,11 @@ for URL in "${URLS[@]}"; do
   FILENAME=$(basename "$URL")
   OUTPUT_PATH="$OUT_DIR/$FILENAME"
 
+  if [[ "$FILENAME" == *.gz ]] && [[ "$DOWNLOAD_ALL" == false ]]; then
+    echo "Skipping $FILENAME (large .gz file, use --download-all to include)"
+    continue
+  fi
+
   if [[ -f "$OUTPUT_PATH" ]]; then
     echo "Skipping $OUTPUT_PATH (already exists)"
     continue
@@ -90,4 +100,6 @@ done
 
 echo "Done downloading."
 
-gunzip datasets/g6/*.gz
+if [[ "$DOWNLOAD_ALL" == true ]]; then
+  gunzip datasets/g6/*.gz
+fi

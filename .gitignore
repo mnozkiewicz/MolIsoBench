@@ -14,7 +14,10 @@ wheels/
 data/*
 datasets/*
 
+# Notebooks
+*.ipynb
 
 # Vscode
 .DS_Store
 .vscode
+CLAUDE.md
