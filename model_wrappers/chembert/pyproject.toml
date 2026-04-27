@@ -1,0 +1,12 @@
+[project]
+name = "chembert"
+version = "0.1.0"
+dependencies = [
+    "torch",
+    "transformers",
+    "pandas",
+    "pyarrow",
+    "click",
+    "numpy",
+    "tqdm",
+]
