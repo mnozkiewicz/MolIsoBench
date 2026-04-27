@@ -1,0 +1,14 @@
+[project]
+name = "coati"
+version = "0.1.0"
+dependencies = [
+    "torch",
+    "pandas",
+    "pyarrow",
+    "click",
+    "numpy",
+    "tqdm",
+    "boto3",
+    "rdkit",
+    "pytz",
+]
