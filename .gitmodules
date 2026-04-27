@@ -4,3 +4,6 @@
 [submodule "model_wrappers/chemformer/Chemformer"]
 	path = model_wrappers/chemformer/Chemformer
 	url = https://github.com/MolecularAI/Chemformer
+[submodule "model_wrappers/clamp/clamp_repo"]
+	path = model_wrappers/clamp/clamp_repo
+	url = https://github.com/ml-jku/clamp

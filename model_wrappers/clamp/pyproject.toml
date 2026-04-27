@@ -1,0 +1,21 @@
+[project]
+name = "clamp"
+version = "0.1.0"
+dependencies = [
+    "torch>=1.13.1",
+    "torchvision>=0.14.1",
+    "transformers>=4.26.0",
+    "numpy",
+    "scipy",
+    "scikit-learn",
+    "pandas",
+    "rdkit",
+    "loguru",
+    "tqdm",
+    "nltk",
+    "mhnreact @ git+https://github.com/ml-jku/mhn-react.git",
+    "clip @ git+https://github.com/openai/CLIP.git",
+    "pyarrow",
+    "networkx",
+    "swifter",
+]

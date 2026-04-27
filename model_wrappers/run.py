@@ -54,17 +54,19 @@ def embed_dataset(model: EmbeddingModel, input_path: Path, output_path: Path, ba
 @click.option("--output-dir", default="datasets/embeddings", show_default=True)
 @click.option("--batch-size", default=64, show_default=True, type=int)
 @click.option("--model-kwargs", default="{}", show_default=True, help="JSON string of model-specific kwargs e.g. '{\"pooling\":\"mean\"}'")
-def main(model_dir, input, output_dir, batch_size, model_kwargs):
+@click.option("--run-name", default=None, help="Override output subdirectory name (defaults to model_dir name)")
+def main(model_dir, input, output_dir, batch_size, model_kwargs, run_name):
     model_dir_path = Path(model_dir)
     input_path = Path(input)
 
-    out = Path(output_dir) / model_dir_path.name
+    out = Path(output_dir) / (run_name or model_dir_path.name)
     out.mkdir(parents=True, exist_ok=True)
     output_path = out / f"{input_path.stem}.parquet"
 
     wrapper = load_wrapper(model_dir_path)
     model = wrapper.get_embedder(**json.loads(model_kwargs))
     embed_dataset(model, input_path, output_path, batch_size)
+
 
 
 if __name__ == "__main__":

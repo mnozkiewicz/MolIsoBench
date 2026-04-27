@@ -1,9 +1,10 @@
 [project]
-name = "chembert"
+name = "huggingface"
 version = "0.1.0"
 dependencies = [
     "torch",
-    "transformers",
+    "transformers>=4.36.0,<4.40.0",
+    "einops",
     "pandas",
     "pyarrow",
     "click",
