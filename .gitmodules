@@ -13,3 +13,6 @@
 [submodule "model_wrappers/graphfp/GraphFP"]
 	path = model_wrappers/graphfp/GraphFP
 	url = https://github.com/lvkd84/GraphFP
+[submodule "model_wrappers/graphmvp/graphmvp_repo"]
+	path = model_wrappers/graphmvp/graphmvp_repo
+	url = https://github.com/chao1224/graphmvp
