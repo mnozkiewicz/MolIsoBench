@@ -1,3 +1,6 @@
 [submodule "model_wrappers/coati/COATI"]
 	path = model_wrappers/coati/COATI
 	url = https://github.com/terraytherapeutics/COATI
+[submodule "model_wrappers/chemformer/Chemformer"]
+	path = model_wrappers/chemformer/Chemformer
+	url = https://github.com/MolecularAI/Chemformer
