@@ -1,0 +1,3 @@
+[submodule "model_wrappers/coati/COATI"]
+	path = model_wrappers/coati/COATI
+	url = https://github.com/terraytherapeutics/COATI
