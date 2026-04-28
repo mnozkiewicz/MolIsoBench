@@ -5,13 +5,13 @@ from pathlib import Path
 import click
 
 
-def convert_one(input_path: Path, output_dir: Path, batch_size: int) -> tuple[str, bool]:
+def convert_one(input_path: Path, output_dir: Path, shard_size: int) -> tuple[str, bool]:
     result = subprocess.run(
         [
             sys.executable, "-m", "src.data_prep.graph6_to_smiles",
             str(input_path),
             "--output-dir", str(output_dir),
-            "--batch-size", str(batch_size),
+            "--shard-size", str(shard_size),
         ],
         capture_output=False,
     )
@@ -21,9 +21,9 @@ def convert_one(input_path: Path, output_dir: Path, batch_size: int) -> tuple[st
 @click.command()
 @click.option("--input-dir", default="datasets/g6", show_default=True, type=click.Path(file_okay=False))
 @click.option("--output-dir", default="datasets/smiles", show_default=True, type=click.Path(file_okay=False))
-@click.option("--workers", default=4, show_default=True, type=int, help="Maximum number of concurrent processes")
-@click.option("--batch-size", default=10_000, show_default=True, type=int)
-def main(input_dir: str, output_dir: str, workers: int, batch_size: int) -> None:
+@click.option("--workers", default=4, show_default=True, type=int)
+@click.option("--shard-size", default=5_000, show_default=True, type=int)
+def main(input_dir: str, output_dir: str, workers: int, shard_size: int) -> None:
     input_dir_path = Path(input_dir)
     output_dir_path = Path(output_dir)
     output_dir_path.mkdir(parents=True, exist_ok=True)
@@ -38,7 +38,7 @@ def main(input_dir: str, output_dir: str, workers: int, batch_size: int) -> None
     failed = []
     with ProcessPoolExecutor(max_workers=workers) as executor:
         futures = {
-            executor.submit(convert_one, f, output_dir_path, batch_size): f
+            executor.submit(convert_one, f, output_dir_path, shard_size): f
             for f in g6_files
         }
         for future in as_completed(futures):

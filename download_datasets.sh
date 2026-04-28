@@ -18,11 +18,11 @@ MEDIUM_FILES=()
 LARGE_FILES=()
 
 # Sets of all connected non-isomorphic graphs with a given number of vertices 
-for i in {2..6}; do
+for i in {2..7}; do
   SMALL_FILES+=("$BASE_URL/graph${i}c.g6")
 done
 
-for i in {7..9}; do
+for i in {8..9}; do
   MEDIUM_FILES+=("$BASE_URL/graph${i}c.g6")
 done
 

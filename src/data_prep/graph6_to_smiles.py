@@ -10,52 +10,47 @@ from src.providers.graph6 import Graph6Provider
 from src.converters.graph_to_smiles import GraphToCarbonSMILESConverter
 
 
-def convert_graph6_to_smiles(input_path: str, output_path: str, batch_size: int = 10_000) -> None:
+def _flush_shard(buffer: list, output_dir: Path, shard_idx: int, input_name: str) -> None:
+    table = pa.Table.from_pandas(pd.DataFrame(buffer), preserve_index=False)
+    pq.write_table(table, output_dir / f"shard_{shard_idx:04d}.parquet")
+    click.echo(f"[{input_name}] shard {shard_idx} ({len(buffer)} rows)")
+
+
+def convert_graph6_to_smiles(
+    input_path: str, output_dir: Path, shard_size: int = 5_000
+) -> None:
     RDLogger.DisableLog("rdApp.*")
+
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     provider = Graph6Provider(input_path)
     converter = GraphToCarbonSMILESConverter()
+    input_name = Path(input_path).name
 
-    writer = None
     buffer = []
-    batch_counter = 0
+    shard_idx = 0
 
     for metadata, graph in provider:
-        smiles = converter.convert(graph)
-        buffer.append({"id": metadata["id"], "smiles": smiles})
+        buffer.append({"id": metadata["id"], "smiles": converter.convert(graph)})
 
-        if len(buffer) >= batch_size:
-            table = pa.Table.from_pandas(pd.DataFrame(buffer), preserve_index=False)
-            if writer is None:
-                writer = pq.ParquetWriter(output_path, table.schema)
-            writer.write_table(table)
+        if len(buffer) >= shard_size:
+            _flush_shard(buffer, output_dir, shard_idx, input_name)
             buffer.clear()
-            batch_counter += 1
-            click.echo(f"[{Path(input_path).name}] Processed {batch_counter} batches")
+            shard_idx += 1
 
     if buffer:
-        table = pa.Table.from_pandas(pd.DataFrame(buffer), preserve_index=False)
-        if writer is None:
-            writer = pq.ParquetWriter(output_path, table.schema)
-        writer.write_table(table)
+        _flush_shard(buffer, output_dir, shard_idx, input_name)
 
-    if writer is not None:
-        writer.close()
-
-    click.echo(f"[{Path(input_path).name}] Done -> {output_path}")
+    click.echo(f"[{input_name}] Done -> {output_dir} ({shard_idx + 1} shard(s))")
 
 
 @click.command()
 @click.argument("input", type=click.Path(exists=True, dir_okay=False))
-@click.option("--output-dir", default="datasets/smiles", show_default=True, help="Directory to save the parquet file")
-@click.option("--batch-size", default=10_000, show_default=True, type=int)
-def main(input: str, output_dir: str, batch_size: int) -> None:
-
-    input_path, output_path = Path(input), Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    output_path = output_path / f"{input_path.stem}.parquet"
-    convert_graph6_to_smiles(str(input_path), str(output_path), batch_size)
+@click.option("--output-dir", default="datasets/smiles", show_default=True)
+@click.option("--shard-size", default=5_000, show_default=True, type=int)
+def main(input: str, output_dir: str, shard_size: int) -> None:
+    input_path = Path(input)
+    convert_graph6_to_smiles(str(input_path), Path(output_dir) / input_path.stem, shard_size)
 
 
 if __name__ == "__main__":
