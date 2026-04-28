@@ -3,18 +3,22 @@
 ## Dataset Download
 
 Datasets are downloaded using the `download_datasets.sh` script.
+All datasets are graphs in graph6 format. There are three types of datasets: small, medium and large.
 
-By default, large `.gz` files are skipped:
+By default, only small files are downloaded.
 
 ```bash
 chmod +x download_datasets.sh
 ./download_datasets.sh
 ```
 
-To download all files including large `.gz` files (which are automatically decompressed after download):
+To download other you need to add appropriate flags.
 
 ```bash
-./download_datasets.sh --download-all
+./download_datasets.sh --small 
+./download_datasets.sh --medium 
+./download_datasets.sh --large 
+./download_datasets.sh --all
 ```
 
 ## SMILES Conversion
