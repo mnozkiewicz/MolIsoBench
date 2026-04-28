@@ -7,9 +7,6 @@
 [submodule "model_wrappers/clamp/clamp_repo"]
 	path = model_wrappers/clamp/clamp_repo
 	url = https://github.com/ml-jku/clamp
-[submodule "model_wrappers/cddd/cddd_repo"]
-	path = model_wrappers/cddd/cddd_repo
-	url = https://github.com/jrwnter/cddd
 [submodule "model_wrappers/graphfp/GraphFP"]
 	path = model_wrappers/graphfp/GraphFP
 	url = https://github.com/lvkd84/GraphFP

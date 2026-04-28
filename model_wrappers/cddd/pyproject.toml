@@ -1,17 +1,12 @@
 [project]
 name = "cddd"
 version = "0.1.0"
-requires-python = ">=3.6, <3.7"
 dependencies = [
-    "tensorflow==1.10.0",
-    "scikit-learn",
-    "pandas<=1.0.3",
-    "numpy<=1.14.5",
-    "requests",
-    "appdirs",
-    "protobuf==3.19.0",
-    "grpcio==1.27.2",
-    "click",
+    "cddd-onnx",
+    "networkx",
+    "numpy",
+    "pandas",
     "pyarrow",
+    "click",
     "tqdm",
 ]

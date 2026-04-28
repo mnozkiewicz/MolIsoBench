@@ -19,4 +19,6 @@ dependencies = [
     "transformers>=5.4.0",
     "click>=8.0.0",
     "scikit-learn>=1.8.0",
+    "faiss-cpu>=1.13.2",
+    "cddd-onnx>=0.1.0",
 ]
