@@ -66,14 +66,17 @@ LARGE_FILES+=("$BASE_URL/perfect11.g6.gz")
 
 
 # Strongly regular graphs
-SMALL_FILES+=(
-    "$BASE_URL/sr291467.g6"
-    "$BASE_URL/sr351668.g6"
-    "$BASE_URL/sr351899.g6"
-    "$BASE_URL/sr361446.g6"
-    "$BASE_URL/sr371889some.g6"
-)
-MEDIUM_FILES+=("$BASE_URL/sr361566.g6.gz")
+# Those graphs are skipped for now cause they generate smiles that are too long for most
+# of the models
+
+# SMALL_FILES+=(
+#     "$BASE_URL/sr291467.g6"
+#     "$BASE_URL/sr351668.g6"
+#     "$BASE_URL/sr351899.g6"
+#     "$BASE_URL/sr361446.g6"
+#     "$BASE_URL/sr371889some.g6"
+# )
+# MEDIUM_FILES+=("$BASE_URL/sr361566.g6.gz")
 
 
 # Planar graphs
