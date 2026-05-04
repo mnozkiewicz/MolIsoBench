@@ -1,0 +1,15 @@
+[project]
+name = "simson"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "torch",
+    "x-transformers==1.31.6",
+    "tokenizers",
+    "pandas",
+    "pyarrow",
+    "click",
+    "tqdm",
+    "numpy",
+    "gdown",
+]
