@@ -7,7 +7,7 @@ PYTHON="$SCRIPT_DIR/.venv/bin/python"
 # Install molbert package into the venv
 if ! "$PYTHON" -c "import molbert" 2>/dev/null; then
     echo "Installing molbert..."
-    "$PYTHON" -m pip install -e "$SCRIPT_DIR/molbert_repo" -q
+    "$PYTHON" -m pip install -e "$SCRIPT_DIR/molbert_repo" --no-deps -q
 fi
 
 # Download pretrained weights

@@ -1,12 +1,18 @@
 [project]
 name = "molbert"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.8, <3.9"
 dependencies = [
+    "torch==1.4.0",
+    "pytorch-lightning==0.8.4",
+    "transformers==3.5.1",
+    "scikit-learn",
+    "scipy",
     "pandas",
     "pyarrow",
     "click",
     "tqdm",
     "numpy",
     "rdkit",
+    "protobuf<3.21",
 ]
