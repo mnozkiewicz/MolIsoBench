@@ -1,9 +1,11 @@
+import os
 import sys
 from pathlib import Path
 from typing import List
 
 _HERE = Path(__file__).parent
-sys.path.insert(0, str(_HERE / "GraphFP" / "mol"))
+_MOL_DIR = _HERE / "GraphFP" / "mol"
+sys.path.insert(0, str(_MOL_DIR))
 
 import numpy as np
 import torch
@@ -11,8 +13,12 @@ from torch_geometric.nn import global_mean_pool
 from torch_geometric.data import Batch
 from rdkit import Chem
 
+_orig_dir = os.getcwd()
+
+os.chdir(_MOL_DIR)
 import downstream_old as base
 from loader import mol_to_graph_data_obj_simple
+os.chdir(_orig_dir)
 
 from src.core.interfaces import EmbeddingModel
 
