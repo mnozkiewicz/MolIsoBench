@@ -1,9 +1,10 @@
 [project]
 name = "mol-r"
 version = "0.1.0"
+requires-python = ">=3.10, <3.11"
 dependencies = [
-    "torch",
-    "dgl",
+    "torch==1.13.1",
+    "dgl==0.9.1",
     "pysmiles",
     "networkx",
     "scikit-learn",
@@ -12,6 +13,8 @@ dependencies = [
     "pyarrow",
     "click",
     "tqdm",
-    "numpy",
+    "numpy<2.0",
     "openbabel-wheel",
+    "packaging",
+    "setuptools",
 ]
