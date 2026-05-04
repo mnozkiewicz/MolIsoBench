@@ -16,3 +16,6 @@
 [submodule "model_wrappers/mol-r/mol_r_repo"]
 	path = model_wrappers/mol-r/mol_r_repo
 	url = https://github.com/hwwang55/MolR
+[submodule "model_wrappers/molbert/molbert_repo"]
+	path = model_wrappers/molbert/molbert_repo
+	url = https://github.com/BenevolentAI/MolBERT
