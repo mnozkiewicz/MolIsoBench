@@ -1,0 +1,17 @@
+[project]
+name = "mol-r"
+version = "0.1.0"
+dependencies = [
+    "torch",
+    "dgl",
+    "pysmiles",
+    "networkx",
+    "scikit-learn",
+    "scipy",
+    "pandas",
+    "pyarrow",
+    "click",
+    "tqdm",
+    "numpy",
+    "openbabel-wheel",
+]
