@@ -32,7 +32,13 @@ uv run -m src.data_prep.graph6_to_smiles <input.g6> [--output-dir datasets/smile
 Convert all graph6 files in `datasets/g6/` in parallel:
 
 ```bash
-uv run prepare_all_smiles.py [--input-dir datasets/g6] [--output-dir datasets/smiles] [--workers 4] [--batch-size 10000]
+uv run scripts/prepare_all_smiles.py [--input-dir datasets/g6] [--output-dir datasets/smiles] [--workers 4] [--shard-size 5000]
+```
+
+Convert molpile SMILES parquet (with optional atom-count filter):
+
+```bash
+uv run scripts/prepare_molpile_smiles.py <input.parquet> [--output-dir datasets/smiles] [--workers 4] [--max-atoms 50]
 ```
 
 ## Embedding Models
@@ -41,31 +47,34 @@ Models live in `model_wrappers/`, each in its own subfolder with an isolated ven
 
 ```
 model_wrappers/{model_name}/
-├── wrapper.py        # EmbeddingModel implementation + Click CLI
-├── .python-version   # Python version for this model's venv
-├── requirements.txt  # Model-specific dependencies
-├── init.sh           # Installs requirements into the venv
-└── venv/             # Created automatically on first run (gitignored)
+├── wrapper.py        # EmbeddingModel implementation + get_embedder()
+├── pyproject.toml    # uv-managed dependencies
+├── init.sh           # Extra setup: clone repos, download weights
+└── .venv/            # Created automatically by uv sync (gitignored)
 ```
 
-Run a model via `embed_model.sh`, which creates the venv on first use and runs `wrapper.py`:
+Run a single shard via `embed_model.sh`, which syncs the venv on first use:
 
 ```bash
-./embed_model.sh models/chembert datasets/smiles/graph8c.parquet
-./embed_model.sh models/chembert datasets/smiles/graph8c.parquet --pooling mean --device cuda
-./embed_model.sh models/fingerprints datasets/smiles/graph8c.parquet --n-bits 1024
+./embed_model.sh model_wrappers/huggingface datasets/smiles/graph6c/shard_0000.parquet --run-name chemberta-77m --model-kwargs '{"model_name":"chemberta-77m"}'
 ```
 
-To force reinstall the venv:
+To force-reinstall the venv:
 
 ```bash
-./embed_model.sh --reinstall models/chembert datasets/smiles/graph8c.parquet
+./embed_model.sh --reinstall model_wrappers/huggingface datasets/smiles/graph6c/shard_0000.parquet
 ```
 
-Embeddings are saved to `datasets/embeddings/{model_name}/{dataset_name}.parquet` with columns `id` and `embedding`.
+Run a model across all datasets in parallel:
+
+```bash
+uv run scripts/run_embedding.py model_wrappers/huggingface --workers 4 --run-name chemberta-77m --model-kwargs '{"model_name":"chemberta-77m"}'
+```
+
+Embeddings are saved to `datasets/embeddings/{run-name}/{dataset_name}/{shard}.parquet` with columns `id` and `embedding`.
 
 ### Adding a new model
 
-1. Create `models/{model_name}/` with the four files above
-2. `wrapper.py` must implement `EmbeddingModel` from `src/core/interfaces.py` and expose `get_embedder(name, **kwargs)`
-3. If the model requires a cloned repo, clone it inside the model folder and add it to `PYTHONPATH` in `init.sh`
+1. Create `model_wrappers/{model_name}/` with `pyproject.toml`, `wrapper.py`, and `init.sh`
+2. `wrapper.py` must implement `EmbeddingModel` from `src/core/interfaces.py` and expose `get_embedder(**kwargs)`
+3. If the model requires a cloned repo or downloaded weights, handle that in `init.sh`
