@@ -9,6 +9,8 @@ import numpy as np
 from molbert.utils.featurizer.molbert_featurizer import MolBertFeaturizer
 
 from src.core.interfaces import EmbeddingModel
+from rdkit import Chem, RDLogger
+RDLogger.DisableLog("rdApp.*")
 
 _CHECKPOINT = _HERE / "weights" / "molbert_100epochs" / "checkpoints" / "last.ckpt"
 _EMB_DIM = 768
