@@ -21,3 +21,8 @@ datasets/*
 .DS_Store
 .vscode
 CLAUDE.md
+
+
+# Qdrant
+
+.qdrant_data
