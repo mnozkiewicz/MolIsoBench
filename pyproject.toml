@@ -22,5 +22,11 @@ dependencies = [
     "faiss-cpu>=1.13.2",
     "cddd-onnx>=0.1.0",
     "natsort>=8.4.0",
-    "qdrant-client[grpc]>=1.17.1",
+    "qdrant-client>=1.17.1",
+    "seaborn>=0.13.2",
+]
+
+[dependency-groups]
+cuda-dev = [
+    "faiss-gpu-cu12",
 ]
