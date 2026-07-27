@@ -10,3 +10,8 @@ dependencies = [
     "click",
     "tqdm",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel",
+]
