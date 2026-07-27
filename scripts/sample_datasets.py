@@ -65,7 +65,7 @@ def write_dataset(df: pd.DataFrame, out_dir: Path, shard_size: int) -> None:
     for shard_idx, start in enumerate(range(0, len(df), shard_size)):
         chunk = df.iloc[start : start + shard_size]
         table = pa.Table.from_pandas(chunk, schema=_SCHEMA, preserve_index=False)
-        pq.write_table(table, out_dir / f"s{shard_idx:04d}.parquet")
+        pq.write_table(table, out_dir / f"shard_{shard_idx:04d}.parquet")
 
 
 # --------------------------------------------------------------------------- #
