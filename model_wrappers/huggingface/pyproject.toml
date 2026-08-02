@@ -3,7 +3,7 @@ name = "huggingface"
 version = "0.1.0"
 dependencies = [
     "torch",
-    "transformers>=4.36.0,<4.40.0",
+    "transformers>=4.48.0",
     "einops",
     "pandas",
     "pyarrow",
