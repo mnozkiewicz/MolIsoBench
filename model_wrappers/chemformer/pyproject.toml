@@ -18,3 +18,8 @@ dependencies = [
     "networkx",
     "setuptools<70",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel",
+]

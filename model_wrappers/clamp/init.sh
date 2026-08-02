@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
+# CLAMP now runs through scikit-fingerprints (installed via pyproject.toml on
+# `uv sync`), so there is no repo to build or patch. This file is intentionally
+# a no-op, kept only because embed_model.sh always runs it.
 set -euo pipefail
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-# remove unused import that breaks modern setuptools (safe to run repeatedly)
-sed -i '' 's/import pkg_resources//' "$SCRIPT_DIR/clamp_repo/setup.py" 2>/dev/null || true
-
-uv pip install --python "$SCRIPT_DIR/.venv/bin/python" \
-    -e "$SCRIPT_DIR/clamp_repo" --no-deps

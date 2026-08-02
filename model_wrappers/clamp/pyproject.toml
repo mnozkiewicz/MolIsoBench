@@ -1,21 +1,15 @@
 [project]
 name = "clamp"
 version = "0.1.0"
+requires-python = ">=3.12"
 dependencies = [
-    "torch>=1.13.1",
-    "torchvision>=0.14.1",
-    "transformers>=4.26.0",
+    # CLAMP compound encoder via scikit-fingerprints.
+    # CLAMPFingerprint is unreleased (not in PyPI 2.0.0); pin the master commit that adds it.
+    "scikit-fingerprints[neural] @ git+https://github.com/scikit-fingerprints/scikit-fingerprints.git@e49a9fafaab031a3681b69958978691e73ac5ffc",
+    # required by model_wrappers/run.py inside this venv
     "numpy",
-    "scipy",
-    "scikit-learn",
     "pandas",
-    "rdkit",
-    "loguru",
-    "tqdm",
-    "nltk",
-    "mhnreact @ git+https://github.com/ml-jku/mhn-react.git",
-    "clip @ git+https://github.com/openai/CLIP.git",
     "pyarrow",
-    "networkx",
-    "swifter",
+    "click",
+    "tqdm",
 ]
