@@ -67,7 +67,13 @@ class GraphMVPEmbedder(EmbeddingModel):
 
     def _embed_one(self, smiles: str) -> torch.Tensor:
         try:
+            # Prefer a sanitized parse (faithful for valid molecules); fall back
+            # to sanitize=False so graph-derived SMILES with hypervalent atoms
+            # still featurize (the featurizer only reads atom/bond type + chirality
+            # + bond dir, none of which need sanitization).
             mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                mol = Chem.MolFromSmiles(smiles, sanitize=False)
             pyg = mol_to_graph_data_obj_simple(mol)
             return pyg
         except Exception:
