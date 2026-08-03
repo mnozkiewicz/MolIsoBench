@@ -19,6 +19,7 @@ from rdkit import Chem
 _orig_dir = os.getcwd()
 os.chdir(_MOL_DIR)
 import downstream_old as base
+import downstream_frag_old as base_frag  # frag GNN uses Embedding(908), not 800
 from loader import mol_to_graph_data_obj_simple
 from mol_bpe import Tokenizer
 os.chdir(_orig_dir)
@@ -68,7 +69,10 @@ class GraphFPEmbedder(EmbeddingModel):
         self._tokenizer = None
         self._vocab_dict = None
         if self.mode == "CPF":
-            frag_model = base.GNN_graphpred(
+            # NB: the fragment GNN lives in downstream_frag_old, whose atom=False
+            # branch uses Embedding(908) (the pretrained frag-vocab size); the
+            # copy in downstream_old hardcodes 800 and won't load this checkpoint.
+            frag_model = base_frag.GNN_graphpred(
                 1, emb_dim=_EMB_DIM, num_gnn_layers=_FRAG_LAYERS, dropout=0,
                 graph_pooling="mean", atom=False,
             )
