@@ -29,8 +29,12 @@ class MolREmbedder(EmbeddingModel):
     def embed(self, smiles: List[str]) -> np.ndarray:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            embeddings, _ = self._model.transform(smiles, batch_size=self._batch_size)
-        return embeddings.astype(np.float32)
+            embeddings, flags = self._model.transform(smiles, batch_size=self._batch_size)
+        embeddings = embeddings.astype(np.float32)
+        # transform() leaves unparsed SMILES as zero rows; mark them NaN so they
+        # are distinguishable from genuine embeddings (flags[i] is False on failure).
+        embeddings[~flags] = np.nan
+        return embeddings
 
 
 def get_embedder(variant: str = "gcn_1024", **kwargs) -> MolREmbedder:
