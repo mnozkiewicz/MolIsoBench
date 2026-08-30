@@ -1,0 +1,16 @@
+[project]
+name = "chemeleon"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    # CheMeleon is a ChemProp MPNN foundation model; chemeleon_fingerprint.py
+    # (vendored in this dir) only needs chemprop >= 2.2.0.
+    "chemprop>=2.2.0",
+    "rdkit",
+    "torch",
+    "numpy",
+    "pandas",
+    "pyarrow",
+    "click",
+    "tqdm",
+]

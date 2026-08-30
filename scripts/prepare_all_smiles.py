@@ -19,7 +19,7 @@ def convert_one(input_path: Path, output_dir: Path, shard_size: int) -> tuple[st
 
 
 @click.command()
-@click.option("--input-dir", default="datasets/g6", show_default=True, type=click.Path(file_okay=False))
+@click.option("--input-dir", default="datasets/g6", show_default=True, type=click.Path(file_okay=True))
 @click.option("--output-dir", default="datasets/smiles", show_default=True, type=click.Path(file_okay=False))
 @click.option("--workers", default=4, show_default=True, type=int)
 @click.option("--shard-size", default=5_000, show_default=True, type=int)
@@ -28,7 +28,7 @@ def main(input_dir: str, output_dir: str, workers: int, shard_size: int) -> None
     output_dir_path = Path(output_dir)
     output_dir_path.mkdir(parents=True, exist_ok=True)
 
-    g6_files = sorted(input_dir_path.glob("*.g6"))
+    g6_files = [input_dir_path] if input_dir_path.is_file() else sorted(input_dir_path.glob("*.g6"))
     if not g6_files:
         click.echo(f"No .g6 files found in {input_dir_path}")
         return
