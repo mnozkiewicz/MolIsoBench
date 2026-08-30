@@ -1,3 +1,5 @@
+import contextlib
+import io
 import os
 import sys
 from pathlib import Path
@@ -32,9 +34,32 @@ class COATI(EmbeddingModel):
         return self.encoder.embed_dim
 
     def embed(self, smiles: List[str]) -> np.ndarray:
-        with torch.no_grad():
-            vecs = embed_smiles_batch(smiles, self.encoder, self.tokenizer)
-        return vecs.cpu().numpy()
+        # COATI's tokenizer has a hard n_seq cap (256); SMILES that tokenize
+        # longer (e.g. brec's large graphs) raise "Oversized String" and would
+        # kill the whole batch. Pre-filter those (and any that fail to tokenize)
+        # -> NaN rows, and embed the rest in one batch. Truncating is not an
+        # option (it would encode a different molecule), so oversized = NaN.
+        dim = self.embedding_dim
+        out = np.full((len(smiles), dim), np.nan, dtype=np.float32)
+
+        ok_idx, ok_smiles = [], []
+        # the tokenizer prints the (huge) offending SMILES on oversize; mute it
+        with contextlib.redirect_stdout(io.StringIO()):
+            for i, smi in enumerate(smiles):
+                try:
+                    self.tokenizer.tokenize_text("[SMILES]" + smi + "[STOP]", pad=True)
+                    ok_idx.append(i)
+                    ok_smiles.append(smi)
+                except Exception:
+                    pass  # oversized / untokenizable -> stays NaN
+
+        if ok_smiles:
+            with torch.no_grad():
+                vecs = embed_smiles_batch(ok_smiles, self.encoder, self.tokenizer)
+            vecs = vecs.cpu().numpy().astype(np.float32)
+            for j, i in enumerate(ok_idx):
+                out[i] = vecs[j]
+        return out
 
 
 def get_embedder(**kwargs) -> COATI:
